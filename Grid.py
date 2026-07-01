@@ -1,4 +1,5 @@
 from Cell import Cell
+from pygame import Surface
 
 import random
 
@@ -47,6 +48,20 @@ class Grid():
         cells = self.get_all_cells()
         for cell in cells: cell.set_state(cell.get_new_state())
         for cell in cells: cell.update_new_state()
+    
+    def draw(self, screen_size):
+        grid_surf = Surface((screen_size[0],screen_size[1]))
+        grid_surf.fill("blue")
+        cell_width = screen_size[0]//self.width
+        cell_height = screen_size[1]//self.height
+        
+        for n, row in enumerate(self.cells):
+            for m, cell in enumerate(row):
+                    cell_left = m*cell_width
+                    cell_top = n*cell_height
+                    grid_surf.blit(cell.draw([cell_width,cell_height]), (cell_left, cell_top))
+        
+        return grid_surf
         
     def __str__(self):
         #return str([[str(cell) for cell in row] for row in self.cells])

@@ -1,3 +1,5 @@
+from pygame import Surface, Rect, draw
+
 class Cell():
     state: bool = False
     neighbours: list = []
@@ -56,5 +58,20 @@ class Cell():
     def update_death_conditions(self, lowerLimit, higherLimit=9):
         self.deathCondition = [n for n in range(0, lowerLimit+1)] +([n for n in range(higherLimit,9)] if higherLimit<9 else [])
     
+    def draw(self,size):
+        third_width = size[0]//3
+        third_height = size[1]//3
+        next_indicator = Rect((third_width, third_height),(third_width,third_height))
+        cell_surf = Surface((size[0],size[1]))
+        if self.get_state():
+            cell_surf.fill("red")
+        if self.get_new_state():
+            draw.rect(cell_surf, "red", next_indicator)
+        else:
+            draw.rect(cell_surf, "black", next_indicator)
+        
+        return cell_surf
+        
+        
     def __str__(self):
         return 'X' if self.get_state() else '.'
