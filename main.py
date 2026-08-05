@@ -4,17 +4,23 @@ from Grid import Grid
 def main():
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
-    
-    BOARD_WIDTH = 48
+
+    #Menu will always be full height of the Screen
+    MENU_WIDTH = 250
+
+    #This is Cells not pixels
+    BOARD_WIDTH = 72
     BOARD_HEIGHT = 48
+
+    
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     running = True
     
-    
-    grid = Grid(BOARD_WIDTH, BOARD_HEIGHT, 10, 10, 'Green', 'Black')
+    main_surf = pygame.Surface((SCREEN_WIDTH-MENU_WIDTH, SCREEN_HEIGHT))
+    grid = Grid(BOARD_WIDTH, BOARD_HEIGHT, (SCREEN_WIDTH-MENU_WIDTH)//BOARD_WIDTH, (SCREEN_HEIGHT)//BOARD_HEIGHT, 'Green', 'Black')
     FPS = 10
     
     while running:
@@ -53,7 +59,8 @@ def main():
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("purple")
         grid.update([])
-        grid.draw(screen)
+        grid.draw(main_surf)
+        screen.blit(main_surf, (250, 0))
         pygame.display.flip()
         clock.tick(FPS)
         

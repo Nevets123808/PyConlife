@@ -5,7 +5,7 @@ import random
 
 class Grid():
     
-    def __init__(self, height, width, cell_height, cell_width, life_colour, death_colour, birthCondition = [3,3], deathCondition = [1,4]):
+    def __init__(self, width, height, cell_width, cell_height, life_colour, death_colour, birthCondition = [3,3], deathCondition = [1,4]):
         self.height = height
         self.width = width
         self.cells = [[Cell(n*cell_width, m*cell_height, cell_width, cell_height, life_colour, death_colour, state = bool(random.getrandbits(1)), birthCondition= birthCondition, deathCondition = deathCondition) for n in range(0,width)] for m in range(0,height)]
