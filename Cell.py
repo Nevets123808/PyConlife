@@ -1,4 +1,4 @@
-from pygame import Surface, Rect, draw
+from pygame import Surface, Rect, draw, mouse
 
 class Cell():
     state: bool = False
@@ -7,7 +7,16 @@ class Cell():
     birthCondition:list = []
     deathCondition:list = []
     
-    def __init__(self, state=False, neighbours:list = [], birthCondition = [3,4], deathCondition = [2,6]):
+    def __init__(self, x, y, w, h, life_colour, death_colour, state=False, neighbours:list = [], birthCondition = [3,4], deathCondition = [2,6]):
+
+        #Location and Colour
+        self.rect = Rect(x, y, w, h)
+        third_width = w//3 if w>3 else 1
+        third_height = h//3 if h>3 else 1
+        self.next_indicator = Rect(x + third_width, y+third_height, third_width, third_height)
+        self.life_colour = life_colour
+        self.death_colour = death_colour
+
         #Set Initial Values
         self.state=state
         self.newState=state
@@ -58,20 +67,14 @@ class Cell():
     def update_death_conditions(self, lowerLimit, higherLimit=9):
         self.deathCondition = [n for n in range(0, lowerLimit+1)] +([n for n in range(higherLimit,9)] if higherLimit<9 else [])
     
-    def draw(self,size):
-        third_width = size[0]//3
-        third_height = size[1]//3
-        next_indicator = Rect((third_width, third_height),(third_width,third_height))
-        cell_surf = Surface((size[0],size[1]))
-        if self.get_state():
-            cell_surf.fill("red")
-        if self.get_new_state():
-            draw.rect(cell_surf, "red", next_indicator)
-        else:
-            draw.rect(cell_surf, "black", next_indicator)
+    def draw(self,surf):
+        draw.rect(surf, self.life_colour if self.get_state() else self.death_colour, self.rect)
+        draw.rect(surf, self.life_colour if self.get_new_state() else self.death_colour, self.next_indicator)
         
-        return cell_surf
-        
-        
+    def update(self, event_list):
+        #automatically update state
+        self.state = self.get_new_state()
+        self.update_new_state()
+
     def __str__(self):
         return 'X' if self.get_state() else '.'

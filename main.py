@@ -5,8 +5,8 @@ def main():
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
     
-    BOARD_WIDTH = 32
-    BOARD_HEIGHT = 30
+    BOARD_WIDTH = 48
+    BOARD_HEIGHT = 48
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -14,7 +14,7 @@ def main():
     running = True
     
     
-    grid = Grid(BOARD_WIDTH, BOARD_HEIGHT)
+    grid = Grid(BOARD_WIDTH, BOARD_HEIGHT, 10, 10, 'Green', 'Black')
     FPS = 10
     
     while running:
@@ -45,15 +45,15 @@ def main():
         if keys[pygame.K_9]:
             FPS = 18
         if keys[pygame.K_r]:
-            grid = Grid(BOARD_WIDTH, BOARD_HEIGHT)
+            grid = Grid(BOARD_WIDTH, BOARD_HEIGHT, 10, 10, 'Green', 'Black')
         if keys[pygame.K_ESCAPE]:
             running=False
         #grid.step()
         #print(grid)
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("purple")
-        grid.step()
-        screen.blit(grid.draw([SCREEN_WIDTH,SCREEN_HEIGHT]), (0,0))
+        grid.update([])
+        grid.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
         

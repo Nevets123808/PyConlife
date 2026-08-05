@@ -5,10 +5,10 @@ import random
 
 class Grid():
     
-    def __init__(self, height, width, birthCondition = [3,3], deathCondition = [1,4]):
+    def __init__(self, height, width, cell_height, cell_width, life_colour, death_colour, birthCondition = [3,3], deathCondition = [1,4]):
         self.height = height
         self.width = width
-        self.cells = [[Cell(state = bool(random.getrandbits(1)), birthCondition= birthCondition, deathCondition = deathCondition) for _ in range(0,width)] for _ in range(0,height)]
+        self.cells = [[Cell(n*cell_width, m*cell_height, cell_width, cell_height, life_colour, death_colour, state = bool(random.getrandbits(1)), birthCondition= birthCondition, deathCondition = deathCondition) for n in range(0,width)] for m in range(0,height)]
         for n, row in enumerate(self.cells):
             for m, cell in enumerate(row):
                 cell.set_neighbours(self.get_cell_neighbours([n,m]))
@@ -44,24 +44,13 @@ class Grid():
             [position[0]+1,position[1]+1]]
         return [self.get_cell(pos) for pos in neighbourPositions if self.get_cell(pos)]
     
-    def step(self):
+    def update(self, event_list):
         cells = self.get_all_cells()
-        for cell in cells: cell.set_state(cell.get_new_state())
-        for cell in cells: cell.update_new_state()
+        for cell in cells: cell.update(event_list)
     
-    def draw(self, screen_size):
-        grid_surf = Surface((screen_size[0],screen_size[1]))
-        grid_surf.fill("blue")
-        cell_width = screen_size[0]//self.width
-        cell_height = screen_size[1]//self.height
-        
-        for n, row in enumerate(self.cells):
-            for m, cell in enumerate(row):
-                    cell_left = m*cell_width
-                    cell_top = n*cell_height
-                    grid_surf.blit(cell.draw([cell_width,cell_height]), (cell_left, cell_top))
-        
-        return grid_surf
+    def draw(self, surf):
+        cells = self.get_all_cells()
+        for cell in cells: cell.draw(surf)
         
     def __str__(self):
         #return str([[str(cell) for cell in row] for row in self.cells])
